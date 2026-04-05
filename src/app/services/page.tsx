@@ -24,23 +24,23 @@ export default function ServicesPage() {
     : mockServices.filter((s) => s.name.includes(activeCat));
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col" style={{ minHeight: "100vh", background: "var(--light)" }}>
       {/* Header */}
       <div className="page-header">
-        <div className="page-title">{t("common.all").toUpperCase()}</div>
-        <span className="page-title-grad">{t("services.title").toUpperCase()} ›</span>
+        <div className="page-title">ALL</div>
+        <span className="page-title-grad">{t("services.title")} ›</span>
 
         {/* Toggle */}
-        <div className="flex gap-3">
+        <div className="toggle-wrap">
           <button
             onClick={() => setActiveTab("legal")}
-            className={`flex-1 py-2.5 rounded-xl text-[13px] font-black transition-all ${activeTab === "legal" ? "bg-[#FF6B00] text-white shadow-md" : "bg-white text-[rgba(0,0,0,0.35)] shadow-sm"}`}
+            className={`toggle-btn ${activeTab === "legal" ? "on" : ""}`}
           >
             {t("services.legal") || "Legal"}
           </button>
           <button
             onClick={() => setActiveTab("gov")}
-            className={`flex-1 py-2.5 rounded-xl text-[13px] font-black transition-all ${activeTab === "gov" ? "bg-[#FF6B00] text-white shadow-md" : "bg-white text-[rgba(0,0,0,0.35)] shadow-sm"}`}
+            className={`toggle-btn ${activeTab === "gov" ? "on" : ""}`}
           >
             {t("services.gov_services")}
           </button>
@@ -50,12 +50,12 @@ export default function ServicesPage() {
       {activeTab === "legal" ? (
         <>
           {/* Category pills */}
-          <div className="flex gap-2 px-5 py-3 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+          <div className="cat-row">
             {categories.map((cat) => (
               <button
                 key={cat.key}
                 onClick={() => setActiveCat(cat.key)}
-                className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-[11px] font-bold transition-all ${activeCat === cat.key ? "bg-[#FF6B00] text-white shadow-md" : "bg-white text-[rgba(0,0,0,0.45)] border border-[rgba(0,0,0,0.08)] shadow-sm"}`}
+                className={`cat-pill ${activeCat === cat.key ? "on" : ""}`}
               >
                 {cat.label}
               </button>
@@ -63,35 +63,43 @@ export default function ServicesPage() {
           </div>
 
           {/* Services list */}
-          <div className="flex-1 overflow-y-auto px-4 py-2 flex flex-col gap-2.5">
+          <div className="svc-scroll" style={{ flex: 1 }}>
             {filteredServices.map((s) => (
-              <Link href="/submit" key={s.id} className="bg-white rounded-2xl p-4 flex items-center gap-3 shadow-sm active:scale-[0.98] transition-transform">
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl" style={{ background: s.color }}>
+              <Link href="/submit" key={s.id} className="svc-card">
+                <div
+                  className="svc-icon"
+                  style={{ background: s.color }}
+                >
                   {s.icon}
                 </div>
-                <div className="flex-1">
-                  <div className="text-[15px] font-black text-[#1C1C1E] tracking-tight">{s.name}</div>
-                  <div className="text-[11px] text-[rgba(0,0,0,0.38)] mt-0.5">{s.specialty}</div>
+                <div className="svc-info">
+                  <div className="svc-name">{s.name}</div>
+                  <div className="svc-auth">{s.specialty}</div>
                 </div>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M6 3l5 5-5 5" stroke="#8E8E93" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+                <div className="svc-right">
+                  <div className="svc-price">→</div>
+                </div>
               </Link>
             ))}
           </div>
         </>
       ) : (
-        <div className="flex-1 overflow-y-auto px-4 py-2 flex flex-col gap-2.5">
+        <div className="svc-scroll" style={{ flex: 1 }}>
           {mockGovServices.map((s) => (
-            <Link href="/submit" key={s.id} className="bg-white rounded-2xl p-4 flex items-center gap-3 shadow-sm active:scale-[0.98] transition-transform">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl" style={{ background: s.color }}>
+            <Link href="/submit" key={s.id} className="svc-card">
+              <div
+                className="svc-icon"
+                style={{ background: s.color }}
+              >
                 {s.icon}
               </div>
-              <div className="flex-1">
-                <div className="text-[15px] font-black text-[#1C1C1E] tracking-tight">{s.name}</div>
-                <div className="text-[11px] text-[rgba(0,0,0,0.38)] mt-0.5">{s.sub}</div>
+              <div className="svc-info">
+                <div className="svc-name">{s.name}</div>
+                <div className="svc-auth">{s.sub}</div>
               </div>
-              <div className="text-[11px] font-bold text-[#10B981]">{s.price}</div>
+              <div className="svc-right">
+                <div className="svc-price" style={{ color: "#10B981" }}>{s.price}</div>
+              </div>
             </Link>
           ))}
         </div>

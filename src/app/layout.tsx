@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "../styles/globals.css";
 import { LanguageProvider } from "@/context/LanguageContext";
 import BottomNav from "../components/layout/BottomNav";
-import PhoneShell from "../components/layout/PhoneShell";
 
 export const metadata: Metadata = {
   title: "MIZAN — Legal Services App",
@@ -18,14 +17,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <LanguageProvider>
-          <PhoneShell>
-            <div className="screen-content">
-              <div className="scroll-area">
-                {children}
-              </div>
-              <BottomNav />
-            </div>
-          </PhoneShell>
+          <div className="app-shell">
+            <main className="app-main">
+              {children}
+            </main>
+            <BottomNav />
+          </div>
         </LanguageProvider>
       </body>
     </html>
