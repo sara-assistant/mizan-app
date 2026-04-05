@@ -3,15 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { z } from "zod";
-
-const serviceTypes = [
-  "Family Law",
-  "Real Estate",
-  "Business",
-  "Criminal",
-  "Traffic",
-  "Labor",
-];
+import { useTranslation } from "react-i18next";
 
 const signupSchema = z
   .object({
@@ -31,6 +23,7 @@ type SignupForm = z.infer<typeof signupSchema>;
 
 export default function SignupPage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [form, setForm] = useState<SignupForm>({
     fullName: "",
     email: "",
@@ -66,11 +59,19 @@ export default function SignupPage() {
       return;
     }
     setLoading(true);
-    // Simulate API call
     await new Promise((r) => setTimeout(r, 1200));
     setLoading(false);
     router.push("/");
   };
+
+  const serviceTypes = [
+    { key: "services.family", label: "Family Law" },
+    { key: "services.real_estate", label: "Real Estate" },
+    { key: "services.business", label: "Business" },
+    { key: "services.criminal", label: "Criminal" },
+    { key: "services.traffic", label: "Traffic" },
+    { key: "services.labor", label: "Labor" },
+  ];
 
   return (
     <div className="flex flex-col h-full" style={{ background: "#F2F2F7" }}>
@@ -82,7 +83,7 @@ export default function SignupPage() {
           </svg>
         </Link>
         <div className="flex-1 text-center pr-10">
-          <h1 className="text-[18px] font-bold" style={{ color: "#1C1C1E" }}>Create Account</h1>
+          <h1 className="text-[18px] font-bold" style={{ color: "#1C1C1E" }}>{t("signup.title")}</h1>
         </div>
       </div>
 
@@ -90,27 +91,26 @@ export default function SignupPage() {
       <div className="flex-1 overflow-y-auto px-4 py-6 flex flex-col gap-5">
         {/* Full Name */}
         <div>
-          <label className="text-[11px] font-semibold tracking-wider uppercase" style={{ color: "#8E8E93" }}>Full Name</label>
+          <label className="text-[11px] font-semibold tracking-wider uppercase" style={{ color: "#8E8E93" }}>{t("signup.full_name")}</label>
           <input
             type="text"
-            placeholder="Your full name"
+            placeholder={t("signup.full_name")}
             value={form.fullName}
             onChange={(e) => update("fullName", e.target.value)}
             className="w-full mt-1 bg-white border rounded-xl px-4 text-[15px] text-[#1C1C1E] outline-none transition-colors placeholder:text-[#8E8E93]"
             style={{
               height: 52,
               borderColor: errors.fullName ? "#FF3B30" : "rgba(0,0,0,0.1)",
-              ...(errors.fullName ? {} : {}),
             }}
           />
           {errors.fullName && (
-            <p className="text-xs mt-1.5" style={{ color: "#FF3B30" }}>{errors.fullName}</p>
+            <p className="text-xs mt-1.5" style={{ color: "#FF3B30" }}>{t("signup.name_required")}</p>
           )}
         </div>
 
         {/* Email */}
         <div>
-          <label className="text-[11px] font-semibold tracking-wider uppercase" style={{ color: "#8E8E93" }}>Email</label>
+          <label className="text-[11px] font-semibold tracking-wider uppercase" style={{ color: "#8E8E93" }}>{t("signup.email")}</label>
           <input
             type="email"
             placeholder="email@example.com"
@@ -123,13 +123,13 @@ export default function SignupPage() {
             }}
           />
           {errors.email && (
-            <p className="text-xs mt-1.5" style={{ color: "#FF3B30" }}>{errors.email}</p>
+            <p className="text-xs mt-1.5" style={{ color: "#FF3B30" }}>{t("signup.email_required")}</p>
           )}
         </div>
 
         {/* Phone */}
         <div>
-          <label className="text-[11px] font-semibold tracking-wider uppercase" style={{ color: "#8E8E93" }}>Phone</label>
+          <label className="text-[11px] font-semibold tracking-wider uppercase" style={{ color: "#8E8E93" }}>{t("signup.phone")}</label>
           <div className="flex gap-2 mt-1">
             <div
               className="flex items-center justify-center rounded-xl text-[15px] font-medium text-[#1C1C1E]"
@@ -161,11 +161,11 @@ export default function SignupPage() {
 
         {/* Password */}
         <div>
-          <label className="text-[11px] font-semibold tracking-wider uppercase" style={{ color: "#8E8E93" }}>Password</label>
+          <label className="text-[11px] font-semibold tracking-wider uppercase" style={{ color: "#8E8E93" }}>{t("signup.password")}</label>
           <div className="relative mt-1">
             <input
               type={showPassword ? "text" : "password"}
-              placeholder="Min. 8 characters"
+              placeholder={t("signup.password_min")}
               value={form.password}
               onChange={(e) => update("password", e.target.value)}
               className="w-full bg-white border rounded-xl px-4 text-[15px] text-[#1C1C1E] outline-none transition-colors placeholder:text-[#8E8E93] pr-12"
@@ -184,17 +184,17 @@ export default function SignupPage() {
             </button>
           </div>
           {errors.password && (
-            <p className="text-xs mt-1.5" style={{ color: "#FF3B30" }}>{errors.password}</p>
+            <p className="text-xs mt-1.5" style={{ color: "#FF3B30" }}>{t("signup.password_min")}</p>
           )}
         </div>
 
         {/* Confirm Password */}
         <div>
-          <label className="text-[11px] font-semibold tracking-wider uppercase" style={{ color: "#8E8E93" }}>Confirm Password</label>
+          <label className="text-[11px] font-semibold tracking-wider uppercase" style={{ color: "#8E8E93" }}>{t("signup.confirm_password")}</label>
           <div className="relative mt-1">
             <input
               type={showConfirm ? "text" : "password"}
-              placeholder="Repeat password"
+              placeholder={t("signup.confirm_password")}
               value={form.confirmPassword}
               onChange={(e) => update("confirmPassword", e.target.value)}
               className="w-full bg-white border rounded-xl px-4 text-[15px] text-[#1C1C1E] outline-none transition-colors placeholder:text-[#8E8E93] pr-12"
@@ -213,23 +213,23 @@ export default function SignupPage() {
             </button>
           </div>
           {errors.confirmPassword && (
-            <p className="text-xs mt-1.5" style={{ color: "#FF3B30" }}>{errors.confirmPassword}</p>
+            <p className="text-xs mt-1.5" style={{ color: "#FF3B30" }}>{t("signup.passwords_match")}</p>
           )}
         </div>
 
         {/* Service Type */}
         <div>
           <label className="text-[11px] font-semibold tracking-wider uppercase mb-2 block" style={{ color: "#8E8E93" }}>
-            Service Type
+            {t("signup.service_type")}
           </label>
           <div className="grid grid-cols-3 gap-2">
             {serviceTypes.map((type) => {
-              const isSelected = form.serviceType === type;
+              const isSelected = form.serviceType === type.label;
               return (
                 <button
-                  key={type}
+                  key={type.key}
                   type="button"
-                  onClick={() => update("serviceType", type)}
+                  onClick={() => update("serviceType", type.label)}
                   className="py-3 px-2 rounded-[18px] text-[12px] font-semibold text-center transition-all active:scale-95"
                   style={{
                     background: isSelected ? "#FFF0E6" : "#fff",
@@ -237,7 +237,7 @@ export default function SignupPage() {
                     color: isSelected ? "#FF6B00" : "#1C1C1E",
                   }}
                 >
-                  {type}
+                  {t(type.key)}
                 </button>
               );
             })}
@@ -258,14 +258,14 @@ export default function SignupPage() {
             boxShadow: "0 4px 16px rgba(255, 107, 0, 0.3)",
           }}
         >
-          {loading ? "Creating account..." : "Create Account"}
+          {loading ? t("common.loading") : t("signup.create_account")}
         </button>
 
         {/* Sign in link */}
         <div className="text-center pb-4">
-          <span className="text-sm" style={{ color: "#8E8E93" }}>Already have an account? </span>
+          <span className="text-sm" style={{ color: "#8E8E93" }}>{t("signup.already_have_account")} </span>
           <Link href="/" className="text-sm font-semibold" style={{ color: "#FF6B00" }}>
-            Sign in
+            {t("signup.sign_in")}
           </Link>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "../styles/globals.css";
+import { LanguageProvider } from "@/context/LanguageContext";
 import BottomNav from "../components/layout/BottomNav";
 import PhoneShell from "../components/layout/PhoneShell";
 
@@ -14,16 +15,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
-        <PhoneShell>
-          <div className="screen-content">
-            <div className="scroll-area">
-              {children}
+        <LanguageProvider>
+          <PhoneShell>
+            <div className="screen-content">
+              <div className="scroll-area">
+                {children}
+              </div>
+              <BottomNav />
             </div>
-            <BottomNav />
-          </div>
-        </PhoneShell>
+          </PhoneShell>
+        </LanguageProvider>
       </body>
     </html>
   );

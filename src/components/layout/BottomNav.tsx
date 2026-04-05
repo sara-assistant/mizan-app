@@ -1,11 +1,12 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 const navItems = [
   {
     href: "/",
-    label: "Home",
+    labelKey: "nav.home",
     activeIcon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
         <path d="M3 12L12 4l9 8" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -22,7 +23,7 @@ const navItems = [
   },
   {
     href: "/chat",
-    label: "Chat",
+    labelKey: "nav.chat",
     activeIcon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
         <path d="M4 4h16a1 1 0 011 1v10a1 1 0 01-1 1H8l-5 4V5a1 1 0 011-1z" stroke="#FF6B00" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
@@ -37,7 +38,7 @@ const navItems = [
   },
   {
     href: "/services",
-    label: "Services",
+    labelKey: "nav.services",
     activeIcon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
         <rect x="3" y="3" width="18" height="18" rx="3" stroke="#FF6B00" strokeWidth="1.7" />
@@ -54,7 +55,7 @@ const navItems = [
   },
   {
     href: "/cases",
-    label: "Cases",
+    labelKey: "nav.cases",
     activeIcon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
         <path d="M4 5.5h16a1.5 1.5 0 011.5 1.5v14a1.5 1.5 0 01-1.5 1.5H4A1.5 1.5 0 012.5 21V7A1.5 1.5 0 014 5.5z" stroke="#FF6B00" strokeWidth="1.7" />
@@ -73,7 +74,7 @@ const navItems = [
   },
   {
     href: "/profile",
-    label: "Profile",
+    labelKey: "nav.profile",
     activeIcon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
         <circle cx="12" cy="8" r="4" stroke="#FF6B00" strokeWidth="1.7" />
@@ -92,6 +93,7 @@ const navItems = [
 
 export default function BottomNav() {
   const pathname = usePathname();
+  const { t } = useTranslation();
 
   return (
     <div className="bottom-nav">
@@ -101,7 +103,7 @@ export default function BottomNav() {
           <Link key={item.href} href={item.href} className="nav-item">
             {item.hasDot && !isActive && <div className="nav-dot" />}
             {isActive ? item.activeIcon : item.inactiveIcon}
-            <span className={`nav-label ${isActive ? "active" : ""}`}>{item.label}</span>
+            <span className={`nav-label ${isActive ? "active" : ""}`}>{t(item.labelKey)}</span>
           </Link>
         );
       })}

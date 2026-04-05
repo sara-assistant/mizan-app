@@ -1,19 +1,28 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/context/LanguageContext";
 import { mockUser } from "../../lib/data/mockData";
 
 export default function ProfilePage() {
+  const { t } = useTranslation();
+  const { lang, setLang } = useLanguage();
   const [notifications, setNotifications] = useState(true);
-  const [lang, setLang] = useState<"en" | "ar">("en");
+
+  const langs = [
+    { code: "en" as const, label: "🇬🇧 English" },
+    { code: "ar" as const, label: "🇦🇪 العربية" },
+    { code: "hi" as const, label: "🇮🇳 हिंदी" },
+  ];
 
   const settings = [
-    { icon: "🛂", label: "Visa & Immigration", sub: "Visa expires in 23 days" },
+    { icon: "🛂", label: t("deadlines.visa_renewal"), sub: `${mockUser.visaDaysLeft} days remaining` },
     { icon: "💼", label: "Employment", sub: "Employment visa · Active" },
-    { icon: "🏠", label: "Tenancy", sub: "Ejari · Renewed Jan 2024" },
-    { icon: "🪪", label: "Emirates ID", sub: "Expires Dec 2025" },
-    { icon: "⚖️", label: "Cases", sub: "1 active case" },
-    { icon: "📁", label: "Documents", sub: "7 documents stored" },
+    { icon: "🏠", label: "Tenancy", sub: `${t("services.ejari_registration")} · Renewed Jan 2024` },
+    { icon: "🪪", label: t("deadlines.emirates_id"), sub: "Expires Dec 2025" },
+    { icon: "⚖️", label: t("cases.title"), sub: `${mockUser.activeCases} ${t("cases.active").toLowerCase()}` },
+    { icon: "📁", label: t("submit.documents"), sub: "7 documents stored" },
   ];
 
   return (
@@ -32,12 +41,9 @@ export default function ProfilePage() {
       <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-4">
         {/* Language Toggle */}
         <div className="bg-white rounded-2xl p-4 shadow-sm">
-          <div className="text-[11px] font-bold text-[#8E8E93] tracking-wider uppercase mb-3">Language</div>
+          <div className="text-[11px] font-bold text-[#8E8E93] tracking-wider uppercase mb-3">{t("profile.app_language")}</div>
           <div className="flex gap-2">
-            {[
-              { code: "en" as const, label: "🇬🇧 English" },
-              { code: "ar" as const, label: "🇦🇪 العربية" },
-            ].map((l) => (
+            {langs.map((l) => (
               <button
                 key={l.code}
                 onClick={() => setLang(l.code)}
@@ -52,8 +58,8 @@ export default function ProfilePage() {
         {/* Notifications Toggle */}
         <div className="bg-white rounded-2xl p-4 shadow-sm flex items-center justify-between">
           <div>
-            <div className="text-[13px] font-black text-[#1C1C1E]">Notifications</div>
-            <div className="text-[11px] text-[#8E8E93]">Push notifications & alerts</div>
+            <div className="text-[13px] font-black text-[#1C1C1E]">{t("profile.preferences")}</div>
+            <div className="text-[11px] text-[#8E8E93]">{t("profile.deadline_reminders")} & alerts</div>
           </div>
           <button
             onClick={() => setNotifications(!notifications)}
@@ -84,7 +90,7 @@ export default function ProfilePage() {
         </div>
 
         <button className="text-[13px] font-black text-[#FF3B30] py-3 text-center">
-          Sign Out
+          {t("profile.sign_out")}
         </button>
 
         <div className="text-center text-[10px] text-[#8E8E93]">

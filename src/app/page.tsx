@@ -1,13 +1,17 @@
 "use client";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { mockUser, mockDeadlines, mockCases, mockGovServices, mockNews, chatSuggestions } from "../lib/data/mockData";
 
 export default function HomePage() {
+  const { t } = useTranslation();
+
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return "Good morning";
-    if (hour < 18) return "Good afternoon";
-    return "Good evening";
+    if (hour < 12) return t("home.greeting_morning");
+    if (hour < 18) return t("home.greeting_afternoon");
+    if (hour < 22) return t("home.greeting_evening");
+    return t("home.greeting_night");
   };
 
   return (
@@ -17,7 +21,7 @@ export default function HomePage() {
         <div className="greeting-row">
           <div>
             <div className="greet-text">{getGreeting()} ☀️</div>
-            <div className="greet-name">Hello, {mockUser.name} 👋</div>
+            <div className="greet-name">{t("home.welcome_back")}, {mockUser.name} 👋</div>
           </div>
           <div className="avatar-wrap">
             <div className="avatar">{mockUser.avatar}</div>
@@ -27,15 +31,15 @@ export default function HomePage() {
         <div className="quick-stats">
           <div className="qs">
             <div className="qs-val qs-accent">{mockUser.visaDaysLeft}d</div>
-            <div className="qs-lbl">Visa expires</div>
+            <div className="qs-lbl">{t("home.urgent_deadlines")}</div>
           </div>
           <div className="qs">
             <div className="qs-val">{mockUser.activeCases}</div>
-            <div className="qs-lbl">Active case</div>
+            <div className="qs-lbl">{t("home.active_cases")}</div>
           </div>
           <div className="qs">
             <div className="qs-val">{mockUser.documents}</div>
-            <div className="qs-lbl">Documents</div>
+            <div className="qs-lbl">{t("submit.documents")}</div>
           </div>
         </div>
       </div>
@@ -44,15 +48,15 @@ export default function HomePage() {
       <div className="alert-banner">
         <div className="alert-icon">⏰</div>
         <div className="flex-1">
-          <div className="alert-title">Visa expires in {mockUser.visaDaysLeft} days</div>
-          <div className="alert-sub">Renew now to avoid daily fines starting April 28</div>
+          <div className="alert-title">{t("home.attention_required")} — {mockUser.visaDaysLeft} days</div>
+          <div className="alert-sub">{t("deadlines.visa_renewal")} — {t("home.urgent_deadlines")}</div>
         </div>
-        <div className="alert-cta">Renew →</div>
+        <div className="alert-cta">{t("common.learn_more")} →</div>
       </div>
 
       {/* Quick Actions */}
       <div className="sec-header">
-        <div className="sec-title">Quick actions</div>
+        <div className="sec-title">{t("home.quick_actions")}</div>
       </div>
       <div className="quick-actions">
         <Link href="/chat" className="qa">
@@ -63,7 +67,7 @@ export default function HomePage() {
               <path d="M9 11h10M9 8h6" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" />
             </svg>
           </div>
-          <div className="qa-label">AI Chat</div>
+          <div className="qa-label">{t("nav.chat")}</div>
         </Link>
         <Link href="/services" className="qa">
           <div className="qa-icon" style={{ background: "#E8F4FE" }}>
@@ -72,7 +76,7 @@ export default function HomePage() {
               <path d="M8 14h12M8 10h12M8 18h8" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" />
             </svg>
           </div>
-          <div className="qa-label">Services</div>
+          <div className="qa-label">{t("nav.services")}</div>
         </Link>
         <Link href="/cases" className="qa">
           <div className="qa-icon" style={{ background: "#EDE9FE" }}>
@@ -83,7 +87,7 @@ export default function HomePage() {
               <circle cx="21" cy="11" r="3" fill="#FF3B30" stroke="#EDE9FE" strokeWidth="1.5" />
             </svg>
           </div>
-          <div className="qa-label">My Cases</div>
+          <div className="qa-label">{t("nav.cases")}</div>
         </Link>
         <Link href="/deadlines" className="qa">
           <div className="qa-icon" style={{ background: "#ECFDF5" }}>
@@ -92,14 +96,14 @@ export default function HomePage() {
               <path d="M8 14h12M8 10h7M8 18h9" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" />
             </svg>
           </div>
-          <div className="qa-label">Vault</div>
+          <div className="qa-label">{t("deadlines.document_vault")}</div>
         </Link>
       </div>
 
       {/* Upcoming Deadlines */}
       <div className="sec-header">
-        <div className="sec-title">Upcoming deadlines</div>
-        <Link href="/deadlines" className="sec-more">See all</Link>
+        <div className="sec-title">{t("home.upcoming_deadlines")}</div>
+        <Link href="/deadlines" className="sec-more">{t("common.see_all")}</Link>
       </div>
       <div className="deadline-scroll">
         {mockDeadlines.map((d) => (
@@ -108,7 +112,7 @@ export default function HomePage() {
             <div className="dc-days" style={{ color: d.daysLeft <= 10 ? "#FF3B30" : d.daysLeft <= 30 ? "#D97706" : "#10B981" }}>
               {d.daysLeft}d
             </div>
-            <div className="dc-unit">days left</div>
+            <div className="dc-unit">{t("deadlines.renew_soon")}</div>
             <div className="dc-name">{d.name}</div>
             <div className="dc-sub">{d.sub}</div>
           </Link>
@@ -117,8 +121,8 @@ export default function HomePage() {
 
       {/* Active Cases */}
       <div className="sec-header" style={{ paddingTop: 20 }}>
-        <div className="sec-title">Active case</div>
-        <Link href="/cases" className="sec-more">View all</Link>
+        <div className="sec-title">{t("home.active_cases")}</div>
+        <Link href="/cases" className="sec-more">{t("common.see_all")}</Link>
       </div>
       {mockCases.filter((c) => c.status === "active").map((c) => (
         <div key={c.id} className="case-card">
@@ -128,7 +132,7 @@ export default function HomePage() {
                 <div className="case-id">Case #{c.id}</div>
                 <div className="case-name">{c.name}</div>
               </div>
-              <div className="case-tag tag-active">Active</div>
+              <div className="case-tag tag-active">{t("cases.active")}</div>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               <div style={{ display: "flex", gap: 4 }}>
@@ -153,24 +157,24 @@ export default function HomePage() {
             </div>
           </div>
           <div className="case-step">
-            <span style={{ fontWeight: 700, color: "#1C1C1E" }}>Next hearing — {c.nextHearing}</span>
+            <span style={{ fontWeight: 700, color: "#1C1C1E" }}>{t("cases.timeline")} — {c.nextHearing}</span>
             <br />
             {c.court} · {c.hearingNote}
           </div>
           <div className="case-action">
             <div className="case-action-text">⚠ {c.actionDue}</div>
-            <Link href="/case-passport" className="case-action-btn">Prepare docs</Link>
+            <Link href="/case-passport" className="case-action-btn">{t("cases.prepare_documents_ai")}</Link>
           </div>
         </div>
       ))}
 
       {/* AI Chat Preview */}
       <div className="sec-header">
-        <div className="sec-title">Ask anything</div>
-        <Link href="/chat" className="sec-more">Open chat</Link>
+        <div className="sec-title">{t("chat.title")}</div>
+        <Link href="/chat" className="sec-more">{t("common.see_all")}</Link>
       </div>
       <Link href="/chat" className="chat-preview">
-        <div className="chat-preview-label">AI Legal Assistant · UAE law · 6 languages</div>
+        <div className="chat-preview-label">{t("chat.title")} · UAE law · 6 languages</div>
         <div className="chat-bubble-ai">Hello {mockUser.name}! What legal question can I help you with today?</div>
         <div className="chat-bubble-user">{chatSuggestions[0]}</div>
         <div className="chat-bubble-ai" style={{ marginBottom: 0 }}>
@@ -178,7 +182,7 @@ export default function HomePage() {
         </div>
         <div style={{ marginTop: 10 }}>
           <div className="chat-input-mock">
-            <span>Ask a legal question...</span>
+            <span>{t("chat.placeholder")}</span>
             <div className="chat-send">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                 <path d="M1.5 10.5L11 6 1.5 1.5v3.5L8 6l-6.5.5V10.5z" fill="#fff" />
@@ -190,8 +194,8 @@ export default function HomePage() {
 
       {/* Government Services */}
       <div className="sec-header">
-        <div className="sec-title">Government services</div>
-        <Link href="/services" className="sec-more">All 22 →</Link>
+        <div className="sec-title">{t("services.gov_services")}</div>
+        <Link href="/services" className="sec-more">{t("services.all_services")} →</Link>
       </div>
       <div className="gov-grid">
         {mockGovServices.map((s) => (
@@ -204,15 +208,15 @@ export default function HomePage() {
               <div className="gc-name">{s.name}</div>
               <div className="gc-sub">{s.sub}</div>
             </div>
-            <div className="gc-cta">Submit →</div>
+            <div className="gc-cta">{t("common.submit")} →</div>
           </Link>
         ))}
       </div>
 
       {/* Legal News */}
       <div className="sec-header">
-        <div className="sec-title">Legal news for you</div>
-        <Link href="/news" className="sec-more">See all</Link>
+        <div className="sec-title">{t("news.title")}</div>
+        <Link href="/news" className="sec-more">{t("common.see_all")}</Link>
       </div>
       <div className="news-scroll">
         {mockNews.map((n) => (

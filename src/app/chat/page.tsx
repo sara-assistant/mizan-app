@@ -1,6 +1,8 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/context/LanguageContext";
 import { getGeminiResponse } from "../../lib/gemini/client";
 import { chatSuggestions } from "../../lib/data/mockData";
 
@@ -10,12 +12,18 @@ interface Message {
 }
 
 export default function ChatPage() {
-  const [messages, setMessages] = useState<Message[]>([
-    { role: "ai", text: "Hello! I'm MIZAN, your AI legal assistant. I can help with UAE law questions in Arabic and English. What can I assist you with today?" },
-  ]);
+  const { t } = useTranslation();
+  const { lang, setLang } = useLanguage();
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMessages([
+      { role: "ai", text: t("chat.welcome") || "Hello! I'm MIZAN, your AI legal assistant. I can help with UAE law questions in Arabic and English. What can I assist you with today?" },
+    ]);
+  }, [lang, t]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -41,6 +49,20 @@ export default function ChatPage() {
     setIsTyping(false);
   };
 
+  const langs = [
+    { code: "ar" as const, label: "AR" },
+    { code: "en" as const, label: "EN" },
+    { code: "hi" as const, label: "HI" },
+  ];
+
+  const getSuggestionKey = (s: string) => {
+    if (s.includes("Unpaid salary")) return t("chat.suggestion_unpaid_salary");
+    if (s.includes("Eviction")) return t("chat.suggestion_eviction_notice");
+    if (s.includes("Labor")) return t("chat.suggestion_labor_dispute");
+    if (s.includes("Visa")) return t("chat.suggestion_visa_problem");
+    return s;
+  };
+
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
@@ -53,14 +75,25 @@ export default function ChatPage() {
           </Link>
           <div className="text-center">
             <div className="text-[15px] font-black text-[#1C1C1E] tracking-tight">MIZAN AI</div>
-            <div className="text-[10px] text-[rgba(0,0,0,0.4)]">UAE Law · Arabic & English</div>
+            <div className="text-[10px] text-[rgba(0,0,0,0.4)]">{t("chat.title")} · UAE</div>
           </div>
           <div style={{ width: 32 }} />
         </div>
         <div className="flex gap-1.5">
-          <div className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#FF6B00] text-white">AR</div>
-          <div className="px-2.5 py-1 rounded-full text-[10px] font-bold border border-[rgba(0,0,0,0.1)] text-[rgba(0,0,0,0.4)]">EN</div>
-          <div className="px-2.5 py-1 rounded-full text-[10px] font-bold border border-[rgba(0,0,0,0.1)] text-[rgba(0,0,0,0.4)]">HI</div>
+          {langs.map((l) => (
+            <button
+              key={l.code}
+              onClick={() => setLang(l.code)}
+              className="px-2.5 py-1 rounded-full text-[10px] font-bold transition-all"
+              style={{
+                background: lang === l.code ? "#FF6B00" : "transparent",
+                border: lang === l.code ? "none" : "1px solid rgba(0,0,0,0.1)",
+                color: lang === l.code ? "#fff" : "rgba(0,0,0,0.4)",
+              }}
+            >
+              {l.label}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -69,10 +102,10 @@ export default function ChatPage() {
         {chatSuggestions.map((s, i) => (
           <button
             key={i}
-            onClick={() => sendMessage(s)}
+            onClick={() => sendMessage(getSuggestionKey(s))}
             className="flex-shrink-0 px-3 py-1.5 rounded-full text-[11px] font-bold bg-[#F5F4F0] text-[rgba(0,0,0,0.55)] border border-[rgba(0,0,0,0.07)]"
           >
-            {s}
+            {getSuggestionKey(s)}
           </button>
         ))}
       </div>
@@ -118,7 +151,7 @@ export default function ChatPage() {
         <div className="flex items-center gap-2 bg-[#F2F2F7] rounded-full px-4 py-2">
           <input
             className="flex-1 bg-transparent text-[15px] text-[#1C1C1E] outline-none placeholder:text-[#8E8E93]"
-            placeholder="Ask a legal question..."
+            placeholder={t("chat.placeholder")}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
@@ -134,7 +167,7 @@ export default function ChatPage() {
           </button>
         </div>
         <p className="text-[9px] text-[#8E8E93] text-center mt-2">
-          MIZAN provides general legal information. For specific legal advice, please consult a licensed lawyer.
+          {t("chat.disclaimer") || "MIZAN provides general legal information. For specific legal advice, please consult a licensed lawyer."}
         </p>
       </div>
     </div>

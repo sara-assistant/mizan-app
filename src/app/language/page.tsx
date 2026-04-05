@@ -7,28 +7,49 @@ const languages = [
     code: "en",
     name: "English",
     nativeName: "English",
-    icon: (
-      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <circle cx="24" cy="24" r="22" stroke="#FF6B00" strokeWidth="2" />
-        <path d="M24 2c0 0-4 8-4 12s4 8 4 8 4-4 4-8-4-12-4-12z" fill="#FF6B00" />
-        <path d="M24 2c0 0 4 8 4 12s-4 8-4 8-4-4-4-8 4-12 4-12z" fill="#FF6B00" />
-        <path d="M2 24h44M24 2v44" stroke="#FF6B00" strokeWidth="2" />
-      </svg>
-    ),
+    flag: "🇬🇧",
   },
   {
     code: "ar",
     name: "Arabic",
     nativeName: "العربية",
-    icon: (
-      <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-        <circle cx="24" cy="24" r="22" stroke="#FF6B00" strokeWidth="2" />
-        <path d="M14 16c0-3 2-6 6-6" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" />
-        <path d="M34 32c0 3-2 6-6 6" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" />
-        <path d="M24 10v28" stroke="#FF6B00" strokeWidth="2" />
-        <path d="M24 16l-8 8 8 8M24 16l8 8-8 8" stroke="#FF6B00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
+    flag: "🇦🇪",
+  },
+  {
+    code: "hi",
+    name: "Hindi",
+    nativeName: "हिंदी",
+    flag: "🇮🇳",
+  },
+  {
+    code: "ur",
+    name: "Urdu",
+    nativeName: "اردو",
+    flag: "🇵🇰",
+  },
+  {
+    code: "fil",
+    name: "Filipino",
+    nativeName: "Filipino",
+    flag: "🇵🇭",
+  },
+  {
+    code: "bn",
+    name: "Bengali",
+    nativeName: "বাংলা",
+    flag: "🇧🇩",
+  },
+  {
+    code: "ru",
+    name: "Russian",
+    nativeName: "Русский",
+    flag: "🇷🇺",
+  },
+  {
+    code: "fa",
+    name: "Farsi",
+    nativeName: "فارسی",
+    flag: "🇮🇷",
   },
 ];
 
@@ -59,7 +80,7 @@ export default function LanguagePage() {
       {/* Heading */}
       <div className="mb-8 text-center">
         <h1 className="text-2xl font-bold mb-2" style={{ color: "#1C1C1E" }}>Choose your language</h1>
-        <p className="text-sm" style={{ color: "#8E8E93" }}>اختر لغتك</p>
+        <p className="text-sm" style={{ color: "#8E8E93" }}>اختر لغتك • भाषा चुनें</p>
       </div>
 
       {/* Language Cards */}
@@ -79,8 +100,8 @@ export default function LanguagePage() {
                   : "0 1px 3px rgba(0,0,0,.06), 0 4px 12px rgba(0,0,0,.04)",
               }}
             >
-              <div className="w-14 h-14 flex items-center justify-center rounded-full" style={{ background: isSelected ? "#fff" : "#F2F2F7" }}>
-                {lang.icon}
+              <div className="w-12 h-12 flex items-center justify-center rounded-full text-3xl" style={{ background: isSelected ? "#fff" : "#F2F2F7" }}>
+                {lang.flag}
               </div>
               <div className="text-left flex-1">
                 <div className="text-lg font-semibold" style={{ color: isSelected ? "#FF6B00" : "#1C1C1E" }}>
@@ -115,7 +136,7 @@ export default function LanguagePage() {
         Continue
       </button>
 
-      <div className="mt-6 text-xs" style={{ color: "#8E8E93" }}>يمكنك التغيير في أي وقت من الإعدادات</div>
+      <div className="mt-6 text-xs" style={{ color: "#8E8E93" }}>You can change this anytime in Settings</div>
     </div>
   );
 }
